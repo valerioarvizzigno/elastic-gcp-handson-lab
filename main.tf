@@ -4,7 +4,7 @@ terraform {
   required_providers {
     ec = {
       source  = "elastic/ec"
-      version = "0.5.0"
+      version = "0.5.1" #always check if newer version is available
     }
   }
 }
@@ -22,17 +22,22 @@ resource "ec_deployment" "custom-deployment-id" {
   name                   = "gcp-lab-${format("%02d", count.index + 1)}"
 
   region                 = "gcp-us-west1"
-  version                = "8.5.1"
-  deployment_template_id = "gcp-general-purpose-v3"
+  version                = "8.6.2" #check the ESS version you want to use!
+  deployment_template_id = "gcp-general-purpose-v3" #check this from the ESS API creation snippet
+  
 
   elasticsearch {
     autoscale = "true"
+    topology {
+      id = "hot_content"
+      zone_count = "1" #set this for HA. If omitted default value for the deployment template is used (often 2)
+    }
   }
 
   kibana {}
   integrations_server {}
 
-  count = 3
+  count = 3 #count of deployments to be created
 }
 
 output "deployment_names" {

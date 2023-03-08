@@ -35,3 +35,6 @@ override.tf.json
 # ignore elastic's API Key files
 #
 *.csv
+
+#Ignore generated deployment endpoints summary file
+created_deployments_summary.txt
