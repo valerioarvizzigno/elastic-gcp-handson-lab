@@ -1,0 +1,85 @@
+# -------------------------------------------------------------
+# Elastic Deployment configuration
+# -------------------------------------------------------------
+variable "elastic_version" {
+  type = string
+  default = "8.6.2"
+}
+
+variable "elastic_region" {
+  type = string
+  default = "gcp-us-west1"
+}
+
+variable "elastic_deployment_template_id" {
+  type = string
+  default = "gcp-general-purpose-v3"
+}
+
+#set this for HA. If omitted default value for the deployment template is used (usually 2)
+variable "elastic_replicas" {
+  type = number
+  default = "1"
+}
+
+#number of Elastic deployments. Each one would be named based on "Elastic_deployment_name" variable
+variable "elastic_deployments_count" {
+  type = number
+  default = "1"
+}
+
+# -------------------------------------------------------------
+# Elastic Index configuration -- USE ONLY if creating Indexes by TF script - not needed for hands on lab --
+# -------------------------------------------------------------
+
+variable "elastic_index_name" {
+  type = string
+  default = "patent-publications-000001"
+}
+
+
+variable "elastic_index_template_name" {
+  type = string
+  default = "patent-publications-template"
+}
+
+# -------------------------------------------------------------
+# BigQuery configuration -- USE ONLY if creating Dataflow jobs by TF script - not needed for hands on lab --
+# -------------------------------------------------------------
+variable "google_cloud_project" {
+  type = string
+}
+
+variable "google_cloud_dataflow_job_name" {
+  type = string
+}
+
+variable "google_cloud_region" {
+  type = string
+  default = "europe-west3"
+}
+
+variable "google_cloud_container_spec_gcs_path"  {
+  type = string
+  default = "gs://dataflow-templates/latest/flex/BigQuery_to_Elasticsearch"
+}
+
+variable "google_cloud_inputTableSpec"  {
+  type = string
+  default = "patents-public-data:patents.publications"
+}
+
+variable "google_cloud_maxNumWorkers"  {
+  type = number
+  default = 5
+}
+
+variable "google_cloud_maxRetryAttempts" {
+  type = string
+  default = 1
+}
+
+variable "google_cloud_maxRetryDuration" {
+  type = string
+  default = 30
+}

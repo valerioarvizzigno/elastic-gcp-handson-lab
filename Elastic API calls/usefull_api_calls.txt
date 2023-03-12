@@ -1,0 +1,5 @@
+//Check if elastic template has being created and explore some of the indexed elements
+GET /patent-publications-000001/_search
+
+//Count how many indexed elements are there 
+GET /patent-publications-000001/_count
