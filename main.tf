@@ -41,6 +41,26 @@ resource "ec_deployment" "custom-deployment-id" {
   count = var.elastic_deployments_count 
 }
 
+#Use this when using this script for patent-search demo.ì, otherwise comment. 
+#It will create the overview sample Kibana Dashboard
+data "external" "elastic_upload_saved_objects" {
+  count = var.elastic_deployments_count 
+  query = {
+	elastic_http_method = "POST"
+    kibana_endpoint  = ec_deployment.custom-deployment-id[count.index].kibana[0].https_endpoint
+    elastic_username  = ec_deployment.custom-deployment-id[count.index].elasticsearch_username
+    elastic_password  = ec_deployment.custom-deployment-id[count.index].elasticsearch_password
+    so_file      		= "./patent-search-resources/dashboards/patent_search_dashboard_overview.ndjson"
+  }
+  program = ["sh", "./patent-search-resources/scripts/kb_upload_saved_objects.sh" ]
+  depends_on = [ec_deployment.custom-deployment-id]
+}
+
+output "elastic_upload_saved_objects" {
+  value = data.external.elastic_upload_saved_objects[*].result
+  depends_on = [data.external.elastic_upload_saved_objects]
+}
+
 output "deployment_names" {
   value = [ec_deployment.custom-deployment-id[*].name]
 }
