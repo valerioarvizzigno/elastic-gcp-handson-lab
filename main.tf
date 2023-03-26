@@ -34,7 +34,11 @@ resource "ec_deployment" "custom-deployment-id" {
     }
   }
 
-  kibana {}
+  kibana {
+    topology {
+      size = var.kibana_size
+    }
+  }
   integrations_server {}
 
   #count of deployments to be created

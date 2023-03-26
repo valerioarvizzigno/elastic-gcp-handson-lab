@@ -28,6 +28,12 @@ variable "elastic_deployments_count" {
   default = "1"
 }
 
+#size of Kibana in memory size. For patent demo on a index of 40GB consider at least 2GB
+variable "kibana_size" {
+  type = string
+  default = "2g"
+}
+
 # -------------------------------------------------------------
 # Elastic Index configuration -- USE ONLY if creating Indexes by TF script - not needed for hands on lab --
 # -------------------------------------------------------------

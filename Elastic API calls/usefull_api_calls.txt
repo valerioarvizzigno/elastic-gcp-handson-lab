@@ -3,3 +3,11 @@ GET /patent-publications-000001/_search
 
 //Count how many indexed elements are there 
 GET /patent-publications-000001/_count
+
+//Set this for fixing async limit in Discover Mode
+PUT _cluster/settings
+{
+  "persistent" : {
+    "search.max_async_search_response_size" : "20mb"
+  }
+}
