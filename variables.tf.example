@@ -8,7 +8,7 @@ variable "elastic_version" {
 
 variable "elastic_region" {
   type = string
-  default = "gcp-us-west1"
+  default = "gcp-us-central1"
 }
 
 variable "elastic_deployment_template_id" {
@@ -32,6 +32,28 @@ variable "elastic_deployments_count" {
 variable "kibana_size" {
   type = string
   default = "2g"
+}
+
+#Variable that define which user settings to load - depending on lab wanted
+variable "lab_user_settings" {
+  type= file
+  default = "./config/user_settings.json" //default one, not lab specific. Set here your own if labs needs specific configs
+}
+
+# -------------------------------------------------------------
+# DEMO SPECIFIC VARIABLES
+# -------------------------------------------------------------
+#Deploy new cluster restoring from an other deployment's snapshot. Must be in the same region.
+
+#User latest_success to refer to the latest snapshot created
+variable "snapshot_name" {
+  type = string
+  default = "__latest_success__"
+}
+
+variable "snapshot_source_cluster_id" {
+  type = string
+  default = "077d11d5592a4b2ebf9df98b2321d843" //-->change this with your cluster id
 }
 
 # -------------------------------------------------------------

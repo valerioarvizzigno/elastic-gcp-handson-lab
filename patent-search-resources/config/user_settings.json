@@ -1,0 +1,5 @@
+{
+    "persistent" : {
+      "search.max_async_search_response_size" : "20mb"
+    }
+}

@@ -24,7 +24,6 @@ resource "ec_deployment" "custom-deployment-id" {
   region                 = var.elastic_region
   version                = var.elastic_version #check the ESS version you want to use!
   deployment_template_id = var.elastic_deployment_template_id #check this from the ESS API creation snippet
-  
 
   elasticsearch {
     autoscale = "true"
@@ -32,6 +31,14 @@ resource "ec_deployment" "custom-deployment-id" {
       id = "hot_content"
       zone_count = var.elastic_replicas #set this for HA. If omitted default value for the deployment template is used (often 2)
     }
+    
+    //add this if you want to load indexes from another deployment snapshot. USED FOR SPECIFIC HANDS-ON
+    //if var.snapshot_name and var.snapshot_source_cluster_id are not set in variables.tf this block is ignored
+    snapshot_source {
+      snapshot_name = var.snapshot_name
+      source_elasticsearch_cluster_id = var.snapshot_source_cluster_id
+    }
+    
   }
 
   kibana {
@@ -40,13 +47,41 @@ resource "ec_deployment" "custom-deployment-id" {
     }
   }
   integrations_server {}
+  enterprise_search {
+    topology {
+      size = var.enterprise_search_size
+    }
+  }
 
   #count of deployments to be created
   count = var.elastic_deployments_count 
 }
 
-#Use this when using this script for patent-search demo.ì, otherwise comment. 
-#It will create the overview sample Kibana Dashboard
+#This script will set user config - found in script/user_settings.json - for Elasticsearch.
+data "external" "es_set_config" {
+  count = var.elastic_deployments_count
+  query = {
+    elastic_http_method = "PUT"
+    elastic_endpoint    = ec_deployment.custom-deployment-id[count.index].elasticsearch[0].https_endpoint
+    elastic_username    = ec_deployment.custom-deployment-id[count.index].elasticsearch_username
+    elastic_password    = ec_deployment.custom-deployment-id[count.index].elasticsearch_password
+    elastic_json_body   = file(var.lab_user_settings) //change path in variables.tf according to the specific lab used
+  }
+  program = ["sh", "./scripts/es_set_config.sh"]
+  depends_on = [ec_deployment.custom-deployment-id]
+}
+
+output "es_set_config" {
+  value = data.external.es_set_config[*].result.acknowledged
+  depends_on = [data.external.es_set_config]
+}
+
+# -------------------------------------------------------------
+# PATENT SEARCH SPECIFIC CONFIG 
+# Use this when using this script for patent-search demo, otherwise comment. 
+# -------------------------------------------------------------
+
+#This will create the overview sample Kibana Dashboard
 data "external" "elastic_upload_saved_objects" {
   count = var.elastic_deployments_count 
   query = {
@@ -65,6 +100,9 @@ output "elastic_upload_saved_objects" {
   depends_on = [data.external.elastic_upload_saved_objects]
 }
 
+# -------------------------------------------------------------
+# COMMON OUTPUT
+# -------------------------------------------------------------
 output "deployment_names" {
   value = [ec_deployment.custom-deployment-id[*].name]
 }
