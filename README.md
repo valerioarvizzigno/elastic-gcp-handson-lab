@@ -6,7 +6,8 @@ You can also enable specific Google Cloud scenarios following dedicated sections
 
 Credits to original repos on which this is inspired: 
 
-https://github.com/eric-lowry/sf-hackathon-tf (Eric Lowry) 
+https://github.com/eric-lowry/sf-hackathon-tf (Eric Lowry)
+
 https://github.com/MarxDimitri/solution-accelerators (Dimitri Marx)
 
 ## Base deployment - Instructions
