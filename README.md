@@ -1,10 +1,11 @@
 # Elastic Hands-on Labs + GCP Scenarios
 Terraform scripts for provisioning multiple identical elastic cloud deployments for partners/customer hands on lab.
-All created environments' endpoint and credentials are outputed in a text file to be easily shared to partecipants.
+All created environments' endpoints and credentials are outputed in a text file to be easily shared to partecipants.
 
 You can also enable specific Google Cloud scenarios following dedicated sections below.
 
-Credits to original repos on which this is inspired:
+Credits to original repos on which this is inspired: 
+
 https://github.com/eric-lowry/sf-hackathon-tf (Eric Lowry)
 https://github.com/MarxDimitri/solution-accelerators (Dimitri Marx)
 
