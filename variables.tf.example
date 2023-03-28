@@ -34,6 +34,19 @@ variable "kibana_size" {
   default = "2g"
 }
 
+#size of Enterprise Search in memory size
+variable "enterprise_search_size" {
+  type = string
+  default = "2g"
+}
+
+#size of ML nodes in memory size
+variable "ml_size" {
+  type = string
+  default = "1g"
+}
+
+
 #Variable that define which user settings to load - depending on lab wanted
 variable "lab_user_settings" {
   type= file

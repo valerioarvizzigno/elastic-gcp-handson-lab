@@ -26,10 +26,14 @@ resource "ec_deployment" "custom-deployment-id" {
   deployment_template_id = var.elastic_deployment_template_id #check this from the ESS API creation snippet
 
   elasticsearch {
-    autoscale = "true"
+    //autoscale = "true" //acts on data nodes and ml nodes. If you set autoscale = true, ml nodes are not created by terraform but spinned up only on demand, even if you define their topology
     topology {
       id = "hot_content"
       zone_count = var.elastic_replicas #set this for HA. If omitted default value for the deployment template is used (often 2)
+    }
+    topology {
+      id = "ml"
+      size = var.ml_size
     }
     
     //add this if you want to load indexes from another deployment snapshot. USED FOR SPECIFIC HANDS-ON
