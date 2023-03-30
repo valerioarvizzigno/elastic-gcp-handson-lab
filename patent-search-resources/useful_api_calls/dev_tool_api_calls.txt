@@ -356,6 +356,25 @@ PUT _cluster/settings
   }
 }
 
+GET patent_search_alias/_search
+{
+  "size" : 0,
+  "query": {
+    "match": {
+      "abstract_localized.text": {
+        "query": "covid"
+      }
+    }
+  },
+  "aggs": {
+    "hidden_terms": {
+      "significant_text": {
+        "field": "claims_localized_html.text"
+      }
+    }
+  }
+}
+
 POST _ml/trained_models/elastic__distilbert-base-uncased-finetuned-conll03-english/_infer
 {
   "docs": [
